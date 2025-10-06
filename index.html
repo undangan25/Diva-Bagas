@@ -176,11 +176,25 @@
     navigator.clipboard.writeText(text);
     alert("Nomor berhasil disalin 💖");
   }
+
+  // tombol kontrol
+  musicControl.onclick = () => {
+    if (isPlaying) {
+      bgMusic.pause();
+      musicControl.innerHTML = "&#9658;";
+    } else {
+      bgMusic.play();
+      musicControl.innerHTML = "&#10073;&#10073;";
+    }
+    isPlaying = !isPlaying;
+  };
 </script>
 
 <body class="bg-[#1c1b1b] text-white font-body">
- 
-  <!-- OPEN INVITATION -->
+ <!--AUDIO-->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="assets/backsoun.mp3" type="audio/mpeg">
+</audio>
 <!-- OPEN INVITATION -->
 <section id="open" class="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden">
   <img src="assets/foto1.webp" class="absolute inset-0 w-full h-full object-cover bg-zoom" alt="Background"/>
@@ -207,8 +221,6 @@
     </button>
   </div>
 </section>
-<script>
-
 
 </script>
   <!-- UNDANGAN -->
