@@ -34,7 +34,8 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
- <!-- Animate.css -->
+ 
+  <!-- Animate.css -->
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -99,97 +100,86 @@
       }
     }
 
-    /* Efek bounce angka countdown */
-    .count-bounce {
-      animation: bounce 0.3s ease;
-    }
-    @keyframes bounce {
-      0% { transform: scale(1); }
-      30% { transform: scale(1.2); }
-      60% { transform: scale(0.9); }
-      100% { transform: scale(1); }
-    }
   </style>
 </head>
 
 <script>
-  // Efek keluar untuk halaman pembuka
-  open.classList.add("fade-out");
+  // Fungsi buka undangan
+  function showInvitation() {
+    const openSection = document.getElementById("open");
+    const invitation = document.getElementById("invitation");
 
-  setTimeout(() => {
-    open.style.display = "none";
-    invitation.classList.remove("hidden");
-    invitation.classList.add("fade-in-up");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, 800);
-// Efek animasi saat scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("fade-in-up");
-    }
-  });
-}, { threshold: 0.2 });
+    openSection.classList.add("fade-out");
 
-document.querySelectorAll("section").forEach((section) => {
-  observer.observe(section);
-});
+    setTimeout(() => {
+      openSection.style.display = "none";
+      invitation.classList.remove("hidden");
+      invitation.classList.add("fade-in-up");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 800);
 
-function showInvitation() {
-  const open = document.getElementById("open");
-  const invitation = document.getElementById("invitation");
+    // Play musik & animasi
+    bgMusic.play()
+      .then(() => {
+        isPlaying = true;
+        musicControl.classList.remove("hidden");
+      })
+      .catch((err) => console.log("Autoplay diblokir:", err));
 
-  open.classList.add("fade-out");
-
-  setTimeout(() => {
-    open.style.display = "none";
-    invitation.classList.remove("hidden");
-    invitation.classList.add("fade-in-up");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, 800);
-}
-
-// Countdown
-document.addEventListener("DOMContentLoaded", () => {
-  const countDownDate = new Date("October 12, 2025 08:00:00").getTime();
-
-  const timer = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = countDownDate - now;
-
-    if (distance < 0) {
-      clearInterval(timer);
-      document.getElementById("countdown").innerHTML = "<p>Hari yang ditunggu telah tiba!</p>";
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    const ids = ["days", "hours", "minutes", "seconds"];
-    [days, hours, minutes, seconds].forEach((num, i) => {
-      const el = document.getElementById(ids[i]);
-      if (el) {
-        el.textContent = num.toString().padStart(2, "0");
-        el.classList.add("count-bounce");
-        setTimeout(() => el.classList.remove("count-bounce"), 300);
-      }
+    gsap.from(invitation.children, {
+      opacity: 0,
+      y: 50,
+      stagger: 0.3,
+      duration: 1
     });
-  }, 1000);
-});
+  }
+
+  // Countdown
+  document.addEventListener("DOMContentLoaded", () => {
+    const countDownDate = new Date("October 12, 2025 08:00:00").getTime();
+    const ids = ["days", "hours", "minutes", "seconds"];
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      if (distance < 0) {
+        clearInterval(timer);
+        document.getElementById("countdown").innerHTML =
+          "<p>Hari yang ditunggu telah tiba!</p>";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const values = [days, hours, minutes, seconds];
+
+      ids.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.textContent = values[i].toString().padStart(2, "0");
+          el.classList.add("count-bounce");
+          setTimeout(() => el.classList.remove("count-bounce"), 300);
+        }
+      });
+    }, 1000);
+  });
+
+  // Fungsi salin teks (nomor rekening, DANA, dll)
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+    alert("Nomor berhasil disalin 💖");
+  }
 </script>
 
-
 <body class="bg-[#1c1b1b] text-white font-body">
-
-  <!-- AUDIO -->
-  <audio id="bgMusic" loop>
-    <source src="assets/backsoun.mp3" type="audio/mpeg">
-  </audio>
-<button id="musicControl" class="text-sm hidden px-4 py-2 bg-[#d4c2a8] rounded-full shadow hover:scale-105 transition">⏸ Pause</button>
-
+ 
   <!-- OPEN INVITATION -->
 <!-- OPEN INVITATION -->
 <section id="open" class="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden">
@@ -217,19 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
     </button>
   </div>
 </section>
-
 <script>
-/* --- Menangkap nama dari URL --- */
-// Contoh URL: https://undangan.com/index.html?to=Diva%20Syaharani
-const urlParams = new URLSearchParams(window.location.search);
-const guest = urlParams.get('to');
 
-if (guest) {
-  document.getElementById('guest-name').innerHTML = `Kepada Yth. <span class="font-semibold">${guest}</span>`;
-}
+
 </script>
-
-
   <!-- UNDANGAN -->
   <main id="invitation" class="hidden">
     <!-- Hero -->
@@ -500,14 +481,6 @@ if (guest) {
       else{bgMusic.play();musicControl.textContent='⏸ Pause';}
       isPlaying=!isPlaying;
     });
-
-    // Notifikasi kecil
-function showToast() {
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
-}
-
 </script>
 
 </script>
@@ -564,17 +537,9 @@ function showToast() {
         daftarUcapan.appendChild(li);
       });
     });
-
-function showToast() {
-  const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
-}
   </script>
 
-
   </main>
-
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
