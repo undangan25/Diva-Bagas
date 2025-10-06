@@ -113,10 +113,6 @@
 </head>
 
 <script>
-function showInvitation() {
-  const open = document.getElementById("open");
-  const invitation = document.getElementById("invitation");
-
   // Efek keluar untuk halaman pembuka
   open.classList.add("fade-out");
 
@@ -126,8 +122,6 @@ function showInvitation() {
     invitation.classList.add("fade-in-up");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, 800);
-}
-
 // Efek animasi saat scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -554,7 +548,6 @@ function showToast() {
       formUcapan.reset();
       showToast();
     });
-}
 
 
     const q = query(collection(db, "ucapan"), orderBy("waktu", "desc"));
